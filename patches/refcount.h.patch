@@ -1,0 +1,15 @@
+diff --git a/src/avro/refcount.h b/src/avro/refcount.h
+index 69afa4f..36db8df 100644
+--- a/src/avro/refcount.h
++++ b/src/avro/refcount.h
+@@ -23,6 +23,10 @@
+ #include <intrin.h>
+ #endif
+ 
++#ifdef __MVS__
++#define AVRO_NON_ATOMIC_REFCOUNT
++#endif
++
+ #ifdef __cplusplus
+ extern "C" {
+ #define CLOSE_EXTERN }
