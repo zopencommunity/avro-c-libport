@@ -1,12 +1,12 @@
 diff --git a/src/avro_private.h b/src/avro_private.h
-index c6d4c87..eb575de 100644
+index c6d4c87..06bd63a 100644
 --- a/src/avro_private.h
 +++ b/src/avro_private.h
 @@ -42,6 +42,8 @@ extern "C" {
   */
  #ifdef _WIN32
    #define AVRO_PLATFORM_IS_BIG_ENDIAN (0)
-+#elif _ZOS
++#elif __MVS__
 +  #define AVRO_PLATFORM_IS_BIG_ENDIAN (1)
  #else // UNIX
    #include <sys/param.h>
