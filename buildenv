@@ -1,0 +1,56 @@
+export ZOPEN_GIT_URL="https://github.com/confluentinc/avro-c-packaging.git"
+export ZOPEN_GIT_DEPS="bash zoslib zlib pkgconfig curl make cmake getopt jansson coreutils"
+export ZOPEN_TYPE="GIT"
+export ZOPEN_RUNTIME_DEPS="bash"
+export ZOPEN_COMP="clang"
+export ZOPEN_CHECK_OPTS='test'
+export ZOPEN_CONFIGURE="cmake"
+export ZOPEN_CONFIGURE_OPTS="."
+export ZOPEN_INSTALL="cmake"
+export ZOPEN_INSTALL_OPTS="--install . --prefix \$ZOPEN_INSTALL_DIR/"
+export ZOPEN_EXTRA_CFLAGS="-mzos-target=zosv2r4"
+export ZOPEN_CLEAN=avro_clean
+
+avro_clean()
+{
+  rm -rf ../build
+}
+
+zopen_check_results()
+{
+  chk="$1/$2_check.log"
+  # grep and parse test summary line, e.g, "75% tests passed, 150 tests failed out of 596"
+  nums=$(egrep "% tests passed" "${chk}" | tr '\n' ' ' | sed -e 's/[^0-9]/ /g' -e 's/^ *//g' -e 's/ *$//g' | tr -s ' ')
+  totalTests=$( echo $nums | awk '{print $3}')
+  failures=$( echo $nums | awk '{print $2}')
+
+cat <<TEST
+actualFailures:$failures
+totalTests:$totalTests
+expectedFailures:0
+TEST
+}
+
+zopen_append_to_env()
+{
+cat <<ZZ
+if [ ! -z "\$ZOPEN_IN_ZOPEN_BUILD" ]; then
+  export ZOPEN_EXTRA_CFLAGS="\${ZOPEN_EXTRA_CFLAGS} -I\$PWD/include"
+  export ZOPEN_EXTRA_CXXFLAGS="\${ZOPEN_EXTRA_CXXFLAGS}	-I\$PWD/include"
+  export ZOPEN_EXTRA_LDFLAGS="\${ZOPEN_EXTRA_LDFLAGS} -L\$PWD/lib"
+  export ZOPEN_EXTRA_LIBS="\${ZOPEN_EXTRA_LIBS}	-lavro \$PWD/lib/libavro.a"
+fi
+ZZ
+}
+
+zopen_append_to_setup()
+{
+  # echo commands that will run when installing via setup.sh
+}
+
+zopen_get_version()
+{
+  # Modify to echo the version of your tool/library
+  # Rather than hardcoding the version, obtain the version by running the tool/library
+  echo "1.0.0"
+}
