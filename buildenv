@@ -2,6 +2,7 @@ export ZOPEN_GIT_URL="https://github.com/confluentinc/avro-c-packaging.git"
 export ZOPEN_GIT_DEPS="bash zoslib zlib pkgconfig curl make cmake getopt jansson coreutils"
 export ZOPEN_TYPE="GIT"
 export ZOPEN_RUNTIME_DEPS="bash"
+export ZOPEN_CATEGORIES="library"
 export ZOPEN_COMP="clang"
 export ZOPEN_CHECK_OPTS='test'
 export ZOPEN_CONFIGURE="cmake"
